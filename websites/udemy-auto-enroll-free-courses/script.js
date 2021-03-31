@@ -1,15 +1,29 @@
+// ==UserScript==
+// @name         UdemyCourses
+// @include      https://www.udemy.com/cart/checkout/*
+// @include      https://www.udemy.com/course/*
+// @include      http://www.udemy.com/cart/checkout/*
+// @include      http://www.udemy.com/course/*
+// @version      0.1.4
+// @description  Semi-automatic enrollment for udemy courses
+// @author       Arguel
+// ==/UserScript==
+
+
+
+"use strict";
+//main variables
+
+//This is the button on the main page before proceeding to finalize the purchase
+const mainSelector = 'button[data-purpose="buy-this-course-button"]'; //string querySelectorAll
+
+const checkFrequencyInMs = 1000; //int
+const timeoutInMs = 7000; //int
+
+//It is the time it will take before clicking on asd, this is set in case your browser / internet connection is slow, the lower it is, the more likely it will fail (a loop could be used but this may also slow down the process)
+const timeToBeInteractiveInMs = 1500; //int
+
 window.onload = () => {
-
-  //main variables
-
-  //This is the button on the main page before proceeding to finalize the purchase
-  const mainSelector = 'button[data-purpose="buy-this-course-button"]';
-
-  const checkFrequencyInMs = 1000;
-  const timeoutInMs = 7000;
-
-  //It is the time it will take before clicking on asd, this is set in case your browser / internet connection is slow, the lower it is, the more likely it will fail (a loop could be used but this may also slow down the process)
-  const timeToBeInteractive = 1500;
 
   function closeWindow() {
     // close the browser window if you are already enrolled in the course (it doesn't work 100% of the time)
@@ -17,7 +31,7 @@ window.onload = () => {
     window.close();
   }
 
-  function waitForElementToDisplay(selector, checkFrequencyInMs, timeoutInMs) {
+  function waitForElementToDisplay(selector, checkFrequency, timeout) {
     var startTimeInMs = Date.now();
     (function loopSearch() {
       const buyBtn = document.querySelectorAll(selector)[0];
@@ -25,19 +39,19 @@ window.onload = () => {
         let buyBtnInnerText = buyBtn.innerText;
         if (buyBtnInnerText == "Enroll now") {
           // click enroll now button
-          setTimeout(document.querySelectorAll(selector)[0].click(), timeToBeInteractive);
+          setTimeout(document.querySelectorAll(selector)[0].click(), timeToBeInteractiveInMs);
         }
 
         if (buyBtnInnerText == "Go to course") {
-          closeWindow;
+          closeWindow();
         }
-        return true;
+        return;
       }
       else {
         // check if the maximum waiting time was exceeded
         setTimeout(function () {
-          if (timeoutInMs && Date.now() - startTimeInMs > timeoutInMs) {
-            return false;
+          if (timeout && Date.now() - startTimeInMs > timeout) {
+            return;
           }
 
           //-------Disabled because you can't select a specific option (maybe in some future update udemy will return it to how it was before)
@@ -46,18 +60,20 @@ window.onload = () => {
           // select the country code/value
           //document.getElementById('billingAddressCountry').value = 'AR';
           // click on the enroll button
-          //setTimeout(document.querySelectorAll('button[type="submit"]')[2].click(), timeToBeInteractive);
-          //closeWindow;
+          //setTimeout(document.querySelectorAll('button[type="submit"]')[2].click(), timeToBeInteractiveInMs);
+          //closeWindow();
           //}
           //catch {
-          //loopSearch();
+          loopSearch();
           //}
 
           //-----------------------------------------------
-        }, checkFrequencyInMs);
+
+        }, checkFrequency);
       }
     })();
   }
 
   waitForElementToDisplay(mainSelector, checkFrequencyInMs, timeoutInMs);
 }
+
