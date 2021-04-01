@@ -24,9 +24,9 @@ const mainSelector = 'button[data-purpose="buy-this-course-button"]'; //string q
 const purchasedSelector = 'div[class="styles--success-alert__text--1kk07"]';
 
 const checkFrequencyInMs = 1000; //int
-const timeoutInMs = 7000; //int
+const timeoutInMs = 10000; //int
 
-// It is the time it will take before clicking on asd, this is set in case your browser / internet connection is slow, the lower it is, the more likely it will fail (a loop could be used but this may also slow down the process)
+// It is the time it will take before clicking on the buttons, this is set in case your browser/internet connection is slow, the lower it is, the more likely it will fail (a loop could be used but this may also slow down the process)
 const timeToBeInteractiveInMs = 1500; //int
 
 // Language variables (you would have to translate the text on the right into your current language)
