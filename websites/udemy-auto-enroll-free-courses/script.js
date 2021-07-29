@@ -6,7 +6,7 @@
 // @include      http://www.udemy.com/cart/checkout/*
 // @include      http://www.udemy.com/course/*
 // @include      http://www.udemy.com/cart/*
-// @version      0.1.5
+// @version      0.1.6
 // @description  Semi-automatic enrollment for udemy courses
 // @author       Arguel
 // @grant        window.close
@@ -21,10 +21,10 @@
 const mainSelector = 'button[data-purpose="buy-this-course-button"]'; //string querySelectorAll
 
 // This refers to the text of "Great choice [user]" that is activated once we confirm the purchase
-const purchasedSelector = 'div[class="styles--success-alert__text--1kk07"]';
+const purchasedSelector = '.udlite-in-udheavy.mb-space-lg.styles--success-alert-banner-container--3ylca';
 
 const checkFrequencyInMs = 1000; //int
-const timeoutInMs = 10000; //int
+const timeoutInMs = 20000; //int
 
 // It is the time it will take before clicking on the buttons, this is set in case your browser/internet connection is slow, the lower it is, the more likely it will fail (a loop could be used but this may also slow down the process)
 const timeToBeInteractiveInMs = 1500; //int
@@ -44,20 +44,14 @@ window.onload = () => {
   }
 
   function waitForElementToDisplay(selector, checkFrequency, timeout) {
-    var startTimeInMs = Date.now();
+    const startTimeInMs = Date.now();
     (function loopSearch() {
-      const buyBtn = document.querySelectorAll(selector)[0];
-      if (buyBtn != null && buyBtn != undefined) {
-        let buyBtnInnerText = buyBtn.innerText;
-        if (buyBtnInnerText == EN_EnrollNow) {
-          // click enroll now button
-          setTimeout(document.querySelectorAll(selector)[0].click(), timeToBeInteractiveInMs);
-        }
-
-        if (buyBtnInnerText == EN_GoToCourse) {
-          closeWindow();
-        }
-        return;
+      const buyBtn = document.querySelector(selector);
+      if (buyBtn !== null) {
+        let buyBtnText = buyBtn.textContent;
+        // click enroll now button
+        if (buyBtnText === EN_EnrollNow) setTimeout(buyBtn.click(), timeToBeInteractiveInMs);
+        if (buyBtnText === EN_GoToCourse) closeWindow();
       }
       else {
         // check if the maximum waiting time was exceeded
@@ -82,9 +76,10 @@ window.onload = () => {
           //-----------------------------------------------
 
           // if the script manages to subscribe to the course it will auto close the browser window
-          const coursePurchased = document.querySelector(purchasedSelector).innerText;
-          if (coursePurchased != null && coursePurchased != undefined) {
-            if (coursePurchased.startsWith(EN_GreatChoice)) {
+          const coursePurchased = document.querySelector(purchasedSelector);
+          if (coursePurchased != null) {
+            const coursePurchasedText = coursePurchased.textContent;
+            if (coursePurchasedText.startsWith(EN_GreatChoice)) {
               closeWindow();
             }
           }
