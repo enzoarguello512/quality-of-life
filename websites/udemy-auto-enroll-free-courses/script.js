@@ -6,7 +6,7 @@
 // @include      http://www.udemy.com/cart/checkout/*
 // @include      http://www.udemy.com/course/*
 // @include      http://www.udemy.com/cart/*
-// @version      0.1.6
+// @version      0.1.7
 // @description  Semi-automatic enrollment for udemy courses
 // @author       Arguel
 // @grant        window.close
@@ -27,7 +27,7 @@ const checkFrequencyInMs = 1000; //int
 const timeoutInMs = 20000; //int
 
 // It is the time it will take before clicking on the buttons, this is set in case your browser/internet connection is slow, the lower it is, the more likely it will fail (a loop could be used but this may also slow down the process)
-const timeToBeInteractiveInMs = 1500; //int
+const timeToBeInteractiveInMs = 6000; //int
 
 // Language variables (you would have to translate the text on the right into your current language)
 const EN_EnrollNow = "Enroll now";
@@ -51,7 +51,7 @@ window.onload = () => {
         let buyBtnText = buyBtn.textContent;
         // click enroll now button
         if (buyBtnText === EN_EnrollNow) setTimeout(buyBtn.click(), timeToBeInteractiveInMs);
-        if (buyBtnText === EN_GoToCourse) closeWindow();
+        if (buyBtnText === EN_GoToCourse) setTimeout(closeWindow, timeToBeInteractiveInMs)
       }
       else {
         // check if the maximum waiting time was exceeded
