@@ -8,7 +8,7 @@
 // @include      http://www.udemy.com/cart/*
 // @version      0.1.7
 // @description  Semi-automatic enrollment for udemy courses
-// @author       Arguel
+// @author       enzoarguello512
 // @grant        window.close
 // ==/UserScript==
 
